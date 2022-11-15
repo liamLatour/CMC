@@ -8,34 +8,44 @@
     </div>
     <div class="full-width row wrap justify-center items-center content-center">
       <club-card
+      v-for="club in clubs"
+          :key="club.id"
         img="https://cdn.quasar.dev/img/parallax2.jpg"
-        location="Here"
-      />
-      <club-card
-        img="https://cdn.quasar.dev/img/parallax2.jpg"
-        location="Here"
-      />
-      <club-card
-        img="https://cdn.quasar.dev/img/parallax2.jpg"
-        location="Here"
-      />
-      <club-card
-        img="https://cdn.quasar.dev/img/parallax2.jpg"
-        location="Here"
+        :location="club.where"
+        :when="club.when"
+        :price="club.price"
+        clickable
+        @click="goToPage(club.id)"
       />
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import ClubCard from 'components/ClubCard.vue';
+import ClubCard from '../components/ClubCard.vue';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-  name: 'ClubPage',
-
+  name: 'ClubsPage',
   components: {
     ClubCard,
   },
+  data: function () {
+    return {
+      fetched: false,
+      clubs: [] as Array<Record<string, unknown>>,
+    };
+  },
+  created: async function () {
+    let response = await this.$api.get("/api/clubs");
+    let clubs = response.data;
+    this.clubs = clubs;
+    this.fetched = true;
+  },
+  methods:{
+    goToPage(id:string){
+      window.location.href = '/clubs/'+id;
+    }
+  }
 });
 </script>

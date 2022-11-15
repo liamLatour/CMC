@@ -1,10 +1,11 @@
 const db = require("../models");
-const Tutorial = db.tutorials;
+const Clubs = db.clubs;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Tutorial
+// Create and Save a new Clubs
 exports.create = (req, res) => {
     // Validate request
+    console.log(req.body);
     if (!req.body.title) {
       res.status(400).send({
         message: "Content can not be empty!"
@@ -12,141 +13,144 @@ exports.create = (req, res) => {
       return;
     }
   
-    // Create a Tutorial
-    const tutorial = {
+    // Create a Clubs
+    const club = {
       title: req.body.title,
+      where: req.body.where,
+      when: req.body.when,
+      price: req.body.price,
       description: req.body.description,
-      published: req.body.published ? req.body.published : false
+      members: req.body.members,
     };
   
-    // Save Tutorial in the database
-    Tutorial.create(tutorial)
+    // Save Clubs in the database
+    Clubs.create(club)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while creating the Tutorial."
+            err.message || "Some error occurred while creating the club."
         });
       });
   };
 
-// Retrieve all Tutorials from the database.
+// Retrieve all Clubss from the database.
 exports.findAll = (req, res) => {
     const title = req.query.title;
-    var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+    const condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
   
-    Tutorial.findAll({ where: condition })
+    Clubs.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving tutorials."
+            err.message || "Some error occurred while retrieving clubs."
         });
       });
   };
 
-// Find a single Tutorial with an id
+// Find a single Clubs with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
   
-    Tutorial.findByPk(id)
+    Clubs.findByPk(id)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Tutorial with id=${id}.`
+            message: `Cannot find Clubs with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Tutorial with id=" + id
+          message: "Error retrieving Clubs with id=" + id
         });
       });
   };
 
-// Update a Tutorial by the id in the request
+// Update a Clubs by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
   
-    Tutorial.update(req.body, {
+    Clubs.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Tutorial was updated successfully."
+            message: "Clubs was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
+            message: `Cannot update Clubs with id=${id}. Maybe Clubs was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Tutorial with id=" + id
+          message: "Error updating Clubs with id=" + id
         });
       });
   };
 
-// Delete a Tutorial with the specified id in the request
+// Delete a Clubs with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
   
-    Tutorial.destroy({
+    Clubs.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Tutorial was deleted successfully!"
+            message: "Clubs was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+            message: `Cannot delete Clubs with id=${id}. Maybe Clubs was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Tutorial with id=" + id
+          message: "Could not delete Clubs with id=" + id
         });
       });
   };
 
-// Delete all Tutorials from the database.
+// Delete all Clubss from the database.
 exports.deleteAll = (req, res) => {
-    Tutorial.destroy({
+    Clubs.destroy({
       where: {},
       truncate: false
     })
       .then(nums => {
-        res.send({ message: `${nums} Tutorials were deleted successfully!` });
+        res.send({ message: `${nums} Clubs were deleted successfully!` });
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while removing all tutorials."
+            err.message || "Some error occurred while removing all clubs."
         });
       });
   };
 
-// Find all published Tutorials
+// Find all published Clubs
 exports.findAllPublished = (req, res) => {
-    Tutorial.findAll({ where: { published: true } })
+    Clubs.findAll({ where: { published: true } })
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving tutorials."
+            err.message || "Some error occurred while retrieving clubs."
         });
       });
   };

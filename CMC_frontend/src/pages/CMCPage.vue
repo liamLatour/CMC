@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import OrganigrammeCard from 'components/OrganigrammeCard.vue';
+import OrganigrammeCard from '../components/OrganigrammeCard.vue';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({

@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import EssentialLink from 'components/EssentialLink.vue';
+import EssentialLink from '../components/EssentialLink.vue';
 
 const linksList = [
   {
@@ -73,48 +73,6 @@ const linksList = [
     title: 'Clubs',
     icon: 'sports_rugby',
     link: '/clubs',
-    subLinks: [
-      {
-        title: 'Basketball',
-        icon: 'school',
-        link: '/nouveaux_etudiants/integration',
-      },
-      {
-        title: 'Escalade',
-        icon: 'help',
-        link: '/nouveaux_etudiants/faq',
-      },
-      {
-        title: 'handball',
-        icon: 'help',
-        link: '/nouveaux_etudiants/faq',
-      },
-      {
-        title: 'pompom',
-        icon: 'help',
-        link: '/nouveaux_etudiants/faq',
-      },
-      {
-        title: 'rock',
-        icon: 'help',
-        link: '/nouveaux_etudiants/faq',
-      },
-      {
-        title: 'rugby',
-        icon: 'help',
-        link: '/nouveaux_etudiants/faq',
-      },
-      {
-        title: 'théâtre',
-        icon: 'help',
-        link: '/nouveaux_etudiants/faq',
-      },
-      {
-        title: 'Volleyball',
-        icon: 'help',
-        link: '/nouveaux_etudiants/faq',
-      },
-    ],
   },
   {
     title: 'CMC',
@@ -167,13 +125,54 @@ const linksList = [
 
 export default defineComponent({
   name: 'MainLayout',
-
   components: {
     EssentialLink,
   },
-
   setup() {
     const leftDrawerOpen = ref(false);
+
+    linksList[2].subLinks = [
+      {
+        title: 'Basketball',
+        icon: 'school',
+        link: '/nouveaux_etudiants/integration',
+      },
+      {
+        title: 'Escalade',
+        icon: 'help',
+        link: '/nouveaux_etudiants/faq',
+      },
+      {
+        title: 'handball',
+        icon: 'help',
+        link: '/nouveaux_etudiants/faq',
+      },
+      {
+        title: 'pompom',
+        icon: 'help',
+        link: '/nouveaux_etudiants/faq',
+      },
+      {
+        title: 'rock',
+        icon: 'help',
+        link: '/nouveaux_etudiants/faq',
+      },
+      {
+        title: 'rugby',
+        icon: 'help',
+        link: '/nouveaux_etudiants/faq',
+      },
+      {
+        title: 'théâtre',
+        icon: 'help',
+        link: '/nouveaux_etudiants/faq',
+      },
+      {
+        title: 'Volleyball',
+        icon: 'help',
+        link: '/nouveaux_etudiants/faq',
+      },
+    ];
 
     return {
       essentialLinks: linksList,
@@ -182,6 +181,18 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
     };
+  },
+  created: async function () {
+    let response = await this.$api.get("/api/clubs");
+    let clubs = response.data;
+    linksList[2].subLinks = []
+
+    for(let club in clubs){
+      linksList[2].subLinks.push({
+        title: clubs[club].title,
+        link: '/clubs/'+clubs[club].id,
+      })
+    }
   },
 });
 </script>

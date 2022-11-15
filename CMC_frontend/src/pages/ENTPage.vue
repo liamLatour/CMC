@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import ENTCard from 'components/ENTCard.vue';
+import ENTCard from '../components/ENTCard.vue';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
